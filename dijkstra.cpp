@@ -1,44 +1,55 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<CodeBlocks_project_file>
-	<FileVersion major="1" minor="6" />
-	<Project>
-		<Option title="Dijkstra" />
-		<Option pch_mode="2" />
-		<Option compiler="gcc" />
-		<Build>
-			<Target title="Debug">
-				<Option output="bin/Debug/Dijkstra" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-g" />
-				</Compiler>
-			</Target>
-			<Target title="Release">
-				<Option output="bin/Release/Dijkstra" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-O2" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-				</Linker>
-			</Target>
-		</Build>
-		<Compiler>
-			<Add option="-Wall" />
-			<Add option="-fexceptions" />
-		</Compiler>
-		<Unit filename="dijkstra.cpp" />
-		<Unit filename="dijkstra.h" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-			<lib_finder disable_auto="1" />
-		</Extensions>
-	</Project>
-</CodeBlocks_project_file>
+// Algoritmo guloso de dijkstra, que retorna o caminho mínimo entre um vértice A e um destino B.. e também a menor distancia entre todos os vértices do grafo!!..
+#include "dijkstra.h"
+
+void dijkstra(int graph[V][V], int src)
+{
+     int dist[V];
+
+     bool sptSet[V];
+
+     for (int i = 0; i < V; i++)
+        dist[i] = INT_MAX, sptSet[i] = false;
+
+     dist[src] = 0;
+
+
+     for (int count = 0; count < V-1; count++)
+     {
+
+       int u = minDistance(dist, sptSet);
+
+
+       sptSet[u] = true;
+
+
+       for (int v = 0; v < V; v++)
+
+
+         if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
+                                       && dist[u]+graph[u][v] < dist[v])
+            dist[v] = dist[u] + graph[u][v];
+     }
+
+
+     printSolution(dist, V);
+}
+
+
+int main()
+{
+
+   int graph[V][V] = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
+                      {4, 0, 8, 0, 0, 0, 0, 11, 0},
+                      {0, 8, 0, 7, 0, 4, 0, 0, 2},
+                      {0, 0, 7, 0, 9, 14, 0, 0, 0},
+                      {0, 0, 0, 9, 0, 10, 0, 0, 0},
+                      {0, 0, 4, 14, 10, 0, 2, 0, 0},
+                      {0, 0, 0, 0, 0, 2, 0, 1, 6},
+                      {8, 11, 0, 0, 0, 0, 1, 0, 7},
+                      {0, 0, 2, 0, 0, 0, 6, 7, 0}
+                     };
+
+    dijkstra(graph, 0);
+
+    return 0;
+}
