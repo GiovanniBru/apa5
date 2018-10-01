@@ -23,7 +23,7 @@ public:
     void prims();
 };
 
-// Quando o grafo é criado criamos também a lista de adjacencia..
+// Quando o grafo Ã© criado criamos tambÃ©m a lista de adjacencia..
 Grafo::Grafo(int V)
 {
     // This-> apenas para evitar problemas com o mesmo nome de variavel ( ponteiro local )
