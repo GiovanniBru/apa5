@@ -1,87 +1,64 @@
-#include "main.h"
+//Giovanni Bruno - APA - PRIM
+//O Algoritmo de PRIM propõe encontrar a árvore geradora mínima de um grafo.
+//Isto significa que ele encontra um subgrafo que forme uma árvore que inclua todos os vértices do grafo original,
+//onde a soma dos pesos das arestas das árvores, será o mínimo possível
 
-void Grafo::prims()
-{
-    // Cria a fila de prioridade que armazena o vetor de vertices..
-    // http://www.cplusplus.com/reference/queue/priority_queue/
-    //priority_queue <Type, vector<Type>, ComparisonType > min_heap;
-    // Usamos essa sintaxe para criar um Heap minimo
-    priority_queue< Vertices, vector <Vertices> , greater<Vertices> > Heap_min;
+#include<iostream>
+#include<cstring>
+#include<string.h>
 
-    int A = 0; // Pegamos o vertice 0 como ponto de partida
-    int MinimaArvore = 0;
+using namespace std;
 
-    // Vetor com os pesos, inicialmente colocamos tudo como infinito
-    vector<int> pesos(V, INF);
+#define V 4
 
+void PRIM(int G[V][V]){
+  int a=0;//aresta
+  int s[V];
 
-    // Vetor que armazena os pais dos vertices ( caminho da MST )
-    vector<int> pais(V, -1);
+  memset(s, 0, sizeof(s)); //define um bloco especificado de memória para um caractere especificado, sobrescrevendo os dados origiais
+  s[0] = 1;
 
+  int x;//linha
+  int y;//coluna
 
-    // Vetor booleano para saber se o vertice já foi incluso na MST, inicia todos falsos obviamente.
-    vector<bool> NaMST(V, false);
-    // Adiciona o A na lista de prioridade e inicia seu peso como zero..
-    Heap_min.push(make_pair(0, A));
-    pesos[A] = 0;
+  cout << "Aresta" << " - " << "Peso"<<endl;
 
-    // Trazido do pseudocodigo, itera até a heap min não chegar em zero..
-    while (!Heap_min.empty())
-    {
+  while(a < V - 1){
+    int min =10000;
+      x = 0;
+      y = 0;
+      int i,j;
 
-        // Extrai o vertice da fila de prioridade,
-        int atual = Heap_min.top().second;
-        Heap_min.pop();
-        NaMST[atual] = true;  
-
-
-
-        list< pair<int, int> >::iterator i;
-        for (i = adj[atual].begin(); i != adj[atual].end(); ++i)
-        {
-
-            int vertice = (*i).first;
-            int peso = (*i).second;
-
-
-            if (NaMST[vertice] == false && pesos[vertice] > peso)
-            {
-
-                pesos[vertice] = peso;
-                Heap_min.push(make_pair(pesos[vertice], vertice));
-                pais[vertice] = atual;
-            }
+      for (i = 0; i < V; i++){
+        if (s[i]){
+            for (j = 0; j < V; j++){
+              if (!s[j] && G[i][j]){
+                  if (min > G[i][j]){
+                      min = G[i][j];
+                      x = i;
+                      y = j;
+                  }
+              }
+          }
         }
+      }
+      cout << x <<  " - " << y << "  = " << G[x][y];
+      cout << endl;
+      s[y] = 1;
+      a++;
     }
-
-
-    for (int i = 1; i < V; ++i)
-        MinimaArvore += pesos[i];
-        cout << "Peso Final da MST:" << endl << MinimaArvore << endl;
 }
 
-int main()
-{
+int main () {
 
-    int V = 9;
-    Grafo g(V);
+    int G[V][V] = {
+            {0, 25, 14, 29},
+            {18, 0, 20, 26},
+            {12, 20, 0, 15},
+            {29, 20, 24, 0}
+    };
 
-    g.AdicionarAresta(0, 1, 4);
-    g.AdicionarAresta(0, 7, 8);
-    g.AdicionarAresta(1, 2, 8);
-    g.AdicionarAresta(1, 7, 11);
-    g.AdicionarAresta(2, 3, 7);
-    g.AdicionarAresta(2, 8, 2);
-    g.AdicionarAresta(2, 5, 4);
-    g.AdicionarAresta(3, 4, 9);
-    g.AdicionarAresta(3, 5, 14);
-    g.AdicionarAresta(4, 5, 10);
-    g.AdicionarAresta(5, 6, 2);
-    g.AdicionarAresta(6, 7, 1);
-    g.AdicionarAresta(6, 8, 6);
-    g.AdicionarAresta(7, 8, 7);
+    PRIM(G);
 
-    g.prims();
-
-    return 0;
+  return 0;
 }
